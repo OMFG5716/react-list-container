@@ -1,5 +1,8 @@
 # React List Container
 
+### NOTE
+This fork of Sacha's work was created so that it can be used with React 16+ by adding create-react-class as a dependency.
+
 A set of React container components (list & item) used to manage template-level subscriptions in Meteor apps. Supports client-side joins and nested trees.
 
 ### Install
