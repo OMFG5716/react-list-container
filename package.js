@@ -32,6 +32,7 @@ Package.onUse((api) => {
 });
 
 Npm.depends({
+  'react': '15.6.2',
   'create-react-class': '15.6.3',
   'prop-types': '15.6.2',
 });
