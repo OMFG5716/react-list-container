@@ -1,11 +1,16 @@
-import React, { PropTypes, Component } from 'react';
+import { Meteor } from 'meteor/meteor';
+
+import React, { cloneElement, Component } from 'react';
+import PropTypes from 'prop-types'; // ES6
+
+const createReactClass = require('create-react-class');
 
 const Subs = new SubsManager();
 
-const DocumentContainer = React.createClass({
+const DocumentContainer = createReactClass({
 
   mixins: [ReactMeteorData],
-  
+
   getMeteorData() {
 
     // subscribe if necessary
@@ -21,7 +26,7 @@ const DocumentContainer = React.createClass({
     if (document && this.props.joins) {
 
       // loop over each join
-      this.props.joins.forEach(join => {
+      this.props.joins.forEach((join) => {
 
         if (join.foreignProperty) {
           // foreign join (e.g. comments belonging to a post)
@@ -37,13 +42,13 @@ const DocumentContainer = React.createClass({
 
           // get the property containing the id or ids
           const joinProperty = document[join.localProperty];
-          const collection = typeof join.collection === "function" ? join.collection() : join.collection;
+          const collection = typeof join.collection === 'function' ? join.collection() : join.collection;
 
           // perform the join
           if (Array.isArray(joinProperty)) { // join property is an array of ids
-            document[join.joinAs] = collection.find({_id: {$in: joinProperty}}).fetch();
+            document[join.joinAs] = collection.find({ _id: { $in: joinProperty } }).fetch();
           } else { // join property is a single id
-            document[join.joinAs] = collection.findOne({_id: joinProperty});
+            document[join.joinAs] = collection.findOne({ _id: joinProperty });
           }
         }
 
@@ -52,8 +57,8 @@ const DocumentContainer = React.createClass({
     }
 
     const data = {
-      currentUser: Meteor.user()
-    }
+      currentUser: Meteor.user(),
+    };
 
     data[this.props.documentPropName] = document;
 
@@ -61,40 +66,39 @@ const DocumentContainer = React.createClass({
   },
 
   render() {
-    const loadingComponent = this.props.loading ? this.props.loading : <p>Loading…</p>
+    const loadingComponent = this.props.loading ? this.props.loading : <p>Loading…</p>;
 
     if (this.data[this.props.documentPropName]) {
       if (this.props.component) {
         const Component = this.props.component;
         return <Component {...this.props.componentProps} {...this.data} collection={this.props.collection} />;
-      } else {
-        return React.cloneElement(this.props.children, { ...this.props.componentProps, ...this.data, collection: this.props.collection });
       }
-    } else {
-      return loadingComponent;
+      return cloneElement(this.props.children, { ...this.props.componentProps, ...this.data, collection: this.props.collection });
+
     }
-  }
+    return loadingComponent;
+
+  },
 
 });
 
 
 DocumentContainer.propTypes = {
-  collection: React.PropTypes.object.isRequired,
-  selector: React.PropTypes.object.isRequired,
-  publication: React.PropTypes.string,
-  terms: React.PropTypes.any,
-  joins: React.PropTypes.array,
-  loading: React.PropTypes.func,
-  component: React.PropTypes.func,
-  componentProps: React.PropTypes.object,
-  documentPropName: React.PropTypes.string,
-  cacheSubscription: React.PropTypes.bool
-}
+  collection: PropTypes.object.isRequired,
+  selector: PropTypes.object.isRequired,
+  publication: PropTypes.string,
+  terms: PropTypes.any,
+  joins: PropTypes.array,
+  loading: PropTypes.func,
+  component: PropTypes.func,
+  componentProps: PropTypes.object,
+  documentPropName: PropTypes.string,
+  cacheSubscription: PropTypes.bool,
+};
 
 DocumentContainer.defaultProps = {
-  documentPropName: "document",
-  cacheSubscription: false
-}
-
+  documentPropName: 'document',
+  cacheSubscription: false,
+};
 
 export default DocumentContainer;

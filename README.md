@@ -4,7 +4,7 @@ A set of React container components (list & item) used to manage template-level 
 
 ### Install
 
-`meteor add utilities:react-list-container`
+`meteor add jivanysh:react-list-container`
 
 ### Usage
 
@@ -15,7 +15,7 @@ This package provides two containers that help you fetch data and pass it as pro
 You can import and use the containers with:
 
 ```js
-import Containers from "meteor/utilities:react-list-container";
+import Containers from "meteor/jivanysh:react-list-container";
 
 const ListContainer = Containers.ListContainer;
 const DocumentContainer = Containers.DocumentContainer;
@@ -291,7 +291,7 @@ Note: your terms should ideally include a unique identifier for the current publ
 Call this from within your publication to update a count:
 
 ```js
-import { CursorCounts } from "meteor/utilities:react-list-container";
+import { CursorCounts } from "meteor/jivanysh:react-list-container";
 
 Meteor.publish('posts', function (terms) {
 
